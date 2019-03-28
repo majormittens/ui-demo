@@ -15,8 +15,8 @@ import store from './store'
 
 // todo
 // cssVars()
-
 Vue.use(BootstrapVue)
+
 Vue.use(require('vue-moment'))
 
 

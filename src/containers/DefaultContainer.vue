@@ -2,8 +2,8 @@
   <div class="app">
     <AppHeader fixed>
       <b-link class="navbar-brand" to="#">
-        <img class="navbar-brand-full" src="static/img/brand/logo.svg" height="60" alt="Logo">
-        <img class="navbar-brand-minimized" src="static/img/brand/logo.svg" width="30" height="30" alt="CoreUI Logo">
+        <img class="navbar-brand-full" src="img/brand/logo.svg" height="60" alt="Logo">
+        <img class="navbar-brand-minimized" src="img/brand/logo.svg" width="30" height="30" alt="CoreUI Logo">
       </b-link>
     </AppHeader>
     <div class="app-body">
