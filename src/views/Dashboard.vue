@@ -10,7 +10,12 @@
                          <h6 slot="header">
                            OrderBook (BTC/USD)
             </h6>
-         <b-table class="mb-0 table-outline orderbook-table-size" responsive="sm" hover :items="binanceOrderBook.asks" small :fields="tableFields"  head-variant="light">
+  <b-input-group prepend="Search" class="mt-3">
+    <b-form-input v-model="filter"></b-form-input>
+  </b-input-group>
+        
+         <b-table class="mb-0 table-outline orderbook-table-size" responsive="sm" hover :items="binanceOrderBook.asks" small :fields="tableFields"  head-variant="light" :filter="filter"  :sort-by.sync="sortByAsks"
+      :sort-desc.sync="sortDescAsks" :no-local-sorting="true">
 
            <template slot="price" slot-scope="data">
       <span style="color:red">
@@ -28,7 +33,8 @@
 <span id="ticker-span" :class="{ 'text-danger': sign < 0, 'text-success': sign > 0 }">{{parseFloat(currentPrice)}}
   <i :class="{'fa fa-arrow-down' : sign < 0, 'fa fa-arrow-up' : sign > 0}"></i>
 </span>
-         <b-table class="mb-0 table-outline orderbook-table-size" responsive="sm" hover :items="binanceOrderBook.bids" small :fields="tableFields"  head-variant="light">
+         <b-table class="mb-0 table-outline orderbook-table-size" responsive="sm" hover :items="binanceOrderBook.bids" small :fields="tableFields"  head-variant="light"  :filter="filter"  :sort-by.sync="sortByBids"
+      :sort-desc.sync="sortDescBids" :no-local-sorting="true">
            <template slot="price" slot-scope="data">
       <span style="color:green">
         {{parseFloat(data.item[0])}}
@@ -73,6 +79,7 @@
     </b-row>
 </b-container>
   </div>
+  
 </template>
 
 <script>
@@ -90,6 +97,10 @@ export default {
   data: function () {
     return {
       avgPrice: 0,
+        sortByAsks: 'price',
+        sortByBids: 'price',
+        sortDescAsks: false,
+        sortDescBids: false,
       chartOptions: {
         title: 'BTC/USD Price',
         series: [{
@@ -98,6 +109,7 @@ export default {
         }]
       },
       sign: 1,
+      filter: '',
       currentPrice: undefined,
       orderBookItems : [],
       binanceOrderBook: {
@@ -107,14 +119,13 @@ export default {
       tableFields: {
         price: {
           label: 'Price',
-          sortable: true
+        sortable: true
         },
         amount: {
-          label: 'Amount'
+          label: 'Amount',
         },
         total: {
           label: 'Total',
-          // class: 'text-center'
         }
       },
     }
@@ -127,7 +138,13 @@ export default {
       ...mapGetters([
       'orderBookBuffer',
       'price'
-    ])
+    ]),
+      filteredUsers: () => {
+    var self = this
+    return self.users.filter(function (user) {
+      return user.name.indexOf(self.searchQuery) !== -1
+    })
+  }
   },
     watch: {
     price: function (newValue, oldValue) {
@@ -151,6 +168,7 @@ export default {
         oldValue: oldValue,
         newValue: newValue
       })
+      
       function sortDescFunction (a, b) {
         return a[0] > b[0] ? -1 : (a[0] === b[0] ? 0 : 1)
       }
@@ -163,7 +181,9 @@ export default {
       let asks = newValue.asks
       let askLimit = asks.length >= limit ? limit : asks.length
 
-      asks = asks.filter(elem => parseFloat(elem[1]) > 0).sort(sortAscFunction)
+      let sortFunction = this.sortDescAsks ? sortDescFunction : sortAscFunction;
+
+      asks = asks.filter(elem => parseFloat(elem[1]) > 0).sort(sortFunction)
       let newAsks = []
       for(let i = 0; i < askLimit; i++) {
         if(asks[i] !== undefined)
@@ -171,10 +191,12 @@ export default {
       }
 
       // let bids = newValue.map(val => val.b).flatten()
+      sortFunction = this.sortDescBids ? sortAscFunction : sortDescFunction;
+
       let bids = newValue.bids
       let bidsLimit = bids.length >= limit ? limit : bids.length
 
-      bids = bids.filter(elem => parseFloat(elem[1]) > 0).sort(sortDescFunction)
+      bids = bids.filter(elem => parseFloat(elem[1]) > 0).sort(sortFunction)
         let newBids = []
         for(let i = 0; i < bidsLimit; i++) {
           if(bids[i] !== undefined)
