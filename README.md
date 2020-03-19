@@ -6,4 +6,4 @@ Bitfinex Orderbook & Price Ticker using Socket, Bootstrap-Vue and Highcharts
 
 Tested with node 9.11.2
 
-![Screenshot](/screenshot.png)
+![Screenshot](/screenshot.PNG)
