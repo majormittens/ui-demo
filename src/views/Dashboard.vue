@@ -1,77 +1,77 @@
 <template>
   <div class="animated fadeIn">
-        <b-container fluid class="bv-example-row">
-    <b-row>
+    <b-container fluid class="bv-example-row">
+      <b-row>
         <b-col>
-    <main-layout>
-      <template slot="order-table">
+          <main-layout>
+            <template slot="order-table">
 
-        <b-card no-body style="height: 400px; overflow-y: scroll;">
-                         <h6 slot="header">
-                           OrderBook (BTC/USD)
-            </h6>
-         <b-table class="mb-0 table-outline orderbook-table-size" responsive="sm" hover :items="binanceOrderBook.asks" small :fields="tableFields"  head-variant="light">
+              <b-card no-body style="height: 400px; overflow-y: scroll;">
+                <h6 slot="header">
+                  OrderBook (BTC/USD)
+                </h6>
+                <b-table class="mb-0 table-outline orderbook-table-size" responsive="sm" hover
+                  :items="binanceOrderBook.asks" small :fields="tableFields" head-variant="light">
 
-           <template slot="price" slot-scope="data">
-      <span style="color:red">
-        {{parseFloat(data.item[0])}}
-      </span>
-           </template>
-               <template slot="amount" slot-scope="data" >
-      {{data.item[1]}}
-            </template>
-               <template slot="total" slot-scope="data" >
-      {{parseFloat(data.item[0]) * parseFloat(data.item[1])}}
-            </template>
-           </b-table>
+                  <template slot="price" slot-scope="data">
+                    <span style="color:red">
+                      {{parseFloat(data.item[0])}}
+                    </span>
+                  </template>
+                  <template slot="amount" slot-scope="data">
+                    {{data.item[1]}}
+                  </template>
+                  <template slot="total" slot-scope="data">
+                    {{parseFloat(data.item[0]) * parseFloat(data.item[1])}}
+                  </template>
+                </b-table>
 
-<span id="ticker-span" :class="{ 'text-danger': sign < 0, 'text-success': sign > 0 }">{{parseFloat(currentPrice)}}
-  <i :class="{'fa fa-arrow-down' : sign < 0, 'fa fa-arrow-up' : sign > 0}"></i>
-</span>
-         <b-table class="mb-0 table-outline orderbook-table-size" responsive="sm" hover :items="binanceOrderBook.bids" small :fields="tableFields"  head-variant="light">
-           <template slot="price" slot-scope="data">
-      <span style="color:green">
-        {{parseFloat(data.item[0])}}
-      </span>
-           </template>
-        <template slot="HEAD_price" slot-scope="data">
-    <!-- A custom formatted header cell for field 'name' -->
-  </template>
-               <template slot="amount" slot-scope="data" >
-      {{data.item[1]}}
-            </template>
-        <template slot="HEAD_amount" slot-scope="data">
-    <!-- A custom formatted header cell for field 'name' -->
-  </template>
-               <template slot="total" slot-scope="data" >
-      {{parseFloat(data.item[0]) * parseFloat(data.item[1])}}
-            </template>
-        <template slot="HEAD_total" slot-scope="data">
-    <!-- A custom formatted header cell for field 'name' -->
-  </template>
-  
-           </b-table>
-        </b-card>
-      </template>
+                <span id="ticker-span"
+                  :class="{ 'text-danger': sign < 0, 'text-success': sign > 0 }">{{parseFloat(currentPrice)}}
+                  <i :class="{'fa fa-arrow-down' : sign < 0, 'fa fa-arrow-up' : sign > 0}"></i>
+                </span>
+                <b-table class="mb-0 table-outline orderbook-table-size" responsive="sm" hover
+                  :items="binanceOrderBook.bids" small :fields="tableFields" head-variant="light">
+                  <template slot="price" slot-scope="data">
+                    <span style="color:green">
+                      {{parseFloat(data.item[0])}}
+                    </span>
+                  </template>
+                  <template slot="HEAD_price" slot-scope="data">
+                    <!-- A custom formatted header cell for field 'name' -->
+                  </template>
+                  <template slot="amount" slot-scope="data">
+                    {{data.item[1]}}
+                  </template>
+                  <template slot="HEAD_amount" slot-scope="data">
+                    <!-- A custom formatted header cell for field 'name' -->
+                  </template>
+                  <template slot="total" slot-scope="data">
+                    {{parseFloat(data.item[0]) * parseFloat(data.item[1])}}
+                  </template>
+                  <template slot="HEAD_total" slot-scope="data">
+                    <!-- A custom formatted header cell for field 'name' -->
+                  </template>
 
-      <template slot="high-stock">
-        <!-- highcharts -->
-    <highcharts :options="chartOptions"></highcharts>
-      </template>
+                </b-table>
+              </b-card>
+            </template>
+
+            <template slot="high-stock">
+              <!-- highcharts -->
+              <highcharts :options="chartOptions"></highcharts>
+            </template>
 
             <template slot="footer">
-  <b-card
-    title="Average Price"
-    class="mb-2"
-  >
-      {{avgPrice}}
+              <b-card title="Average Price" class="mb-2">
+                {{avgPrice}}
 
-  </b-card>
-      </template>
-    </main-layout>
-</b-col>
-    </b-row>
-</b-container>
+              </b-card>
+            </template>
+          </main-layout>
+        </b-col>
+      </b-row>
+    </b-container>
   </div>
 </template>
 
@@ -104,19 +104,17 @@ export default {
         asks: [],
         bids: []
       },
-      tableFields: {
-        price: {
+      tableFields: [
+        {
+          key: '0',
           label: 'Price',
           sortable: true
         },
-        amount: {
+        {
+          key: '1',
           label: 'Amount'
         },
-        total: {
-          label: 'Total',
-          // class: 'text-center'
-        }
-      },
+         ]
     }
   },
   created() {
