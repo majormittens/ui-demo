@@ -1,6 +1,5 @@
 Bitfinex Orderbook & Price Ticker using Socket, Bootstrap-Vue and Highcharts
 
-##Steps to run
 - npm i
 - npm start
 
